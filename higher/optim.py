@@ -17,6 +17,7 @@
 import abc as _abc
 import collections as _collections
 import copy as _copy
+from copy import deepcopy
 import math as _math
 import typing as _typing
 import warnings as _warnings
@@ -234,8 +235,10 @@ class DifferentiableOptimizer(_abc.ABC):
         )
 
         if grad_callback is not None:
+            pre_callback_grads = deepcopy(all_grads)
             all_grads = grad_callback(all_grads)
         elif self._grad_callback is not None:
+            pre_callback_grads = deepcopy(all_grads)
             all_grads = self._grad_callback(all_grads)
 
         grouped_grads = []
@@ -259,7 +262,7 @@ class DifferentiableOptimizer(_abc.ABC):
         if self._fmodel is not None:
             self._fmodel.update_params(new_params)
 
-        return new_params, all_grads
+        return new_params, pre_callback_grads
 
     @_abc.abstractmethod
     def _update(self, grouped_grads: _GroupedGradsType, **kwargs) -> None:
