@@ -259,7 +259,7 @@ class DifferentiableOptimizer(_abc.ABC):
         if self._fmodel is not None:
             self._fmodel.update_params(new_params)
 
-        return new_params
+        return new_params, all_grads
 
     @_abc.abstractmethod
     def _update(self, grouped_grads: _GroupedGradsType, **kwargs) -> None:
