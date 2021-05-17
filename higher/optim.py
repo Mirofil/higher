@@ -235,10 +235,10 @@ class DifferentiableOptimizer(_abc.ABC):
         )
 
         if grad_callback is not None:
-            pre_callback_grads = deepcopy(all_grads)
+            pre_callback_grads = [g.clone().detach() for g in all_grads]
             all_grads = grad_callback(all_grads)
         elif self._grad_callback is not None:
-            pre_callback_grads = deepcopy(all_grads)
+            pre_callback_grads = [g.clone().detach() for g in all_grads]
             all_grads = self._grad_callback(all_grads)
 
         grouped_grads = []
